@@ -27,7 +27,7 @@ async function run() {
                 const allServices = await cursor.toArray();
                 res.send(allServices);
         })
-        //Get All Services
+        //Get All Doctors
         app.get('/doctors',async(req,res)=>{
                 const cursor = await doctorsCollection.find({});
                 const allDoctors = await cursor.toArray();
@@ -45,6 +45,22 @@ async function run() {
             const appoinment = req.body;
             const result = await appoinmentsCollection.insertOne(appoinment);
             res.json(result);
+        })
+        //Get All Bookings
+        app.get('/bookings',async(req,res)=>{
+            const cursor = await appoinmentsCollection.find({});
+            const allBookings = await cursor.toArray();
+            res.send(allBookings);
+        })
+        
+        //Delete single item from appoinments Api
+        app.delete('/bookings/:id', async (req,res)=>{
+            const id = req.params.id;
+            console.log("hitttttttt")
+            const query = {_id : ObjectId(id)};
+            const result = await appoinmentsCollection.deleteOne(query);
+            console.log(result)
+            res.json(result)
         })
     }
     finally {
