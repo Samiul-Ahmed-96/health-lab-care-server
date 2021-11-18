@@ -20,11 +20,18 @@ async function run() {
         const database = client.db("health-care");
         const servicesCollection = database.collection("services");
         const bookingCollection =database.collection("booking");
-        //Get All Watches
+        //Get All Services
         app.get('/services',async(req,res)=>{
                 const cursor = await servicesCollection.find({});
                 const allServices = await cursor.toArray();
                 res.send(allServices);
+        })
+         //Get Service 
+         app.get('/services/:id',async(req,res)=>{
+            const id = req.params.id;
+            const query = {_id : ObjectId(id)};
+            const singleService = await servicesCollection.findOne(query);
+            res.json(singleService);
         })
     }
     finally {
