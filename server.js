@@ -19,12 +19,19 @@ async function run() {
         console.log('db connected')
         const database = client.db("health-care");
         const servicesCollection = database.collection("services");
-        const bookingCollection =database.collection("booking");
+        const doctorsCollection =database.collection("doctors");
+        const appoinmentsCollection =database.collection("appoinments");
         //Get All Services
         app.get('/services',async(req,res)=>{
                 const cursor = await servicesCollection.find({});
                 const allServices = await cursor.toArray();
                 res.send(allServices);
+        })
+        //Get All Services
+        app.get('/doctors',async(req,res)=>{
+                const cursor = await doctorsCollection.find({});
+                const allDoctors = await cursor.toArray();
+                res.send(allDoctors);
         })
          //Get Service 
          app.get('/services/:id',async(req,res)=>{
@@ -32,6 +39,12 @@ async function run() {
             const query = {_id : ObjectId(id)};
             const singleService = await servicesCollection.findOne(query);
             res.json(singleService);
+        })
+        //Add Booking Api
+        app.post('/appoinments',async(req,res)=>{
+            const appoinment = req.body;
+            const result = await appoinmentsCollection.insertOne(appoinment);
+            res.json(result);
         })
     }
     finally {
