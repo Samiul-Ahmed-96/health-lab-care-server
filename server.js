@@ -22,6 +22,7 @@ async function run() {
         const doctorsCollection =database.collection("doctors");
         const appoinmentsCollection =database.collection("appoinments");
         const reviewsCollection =database.collection("reviews");
+        const usersCollection =database.collection("users");
         //Get All Services
         app.get('/services',async(req,res)=>{
                 const cursor = await servicesCollection.find({});
@@ -67,7 +68,22 @@ async function run() {
             const review = req.body;
             const result = await reviewsCollection.insertOne(review);
             res.json(result);
-        })        
+        })
+         //Added user to Db 
+         app.post('/users', async (req,res)=>{
+            const user = req.body;
+            const result = await usersCollection.insertOne(user)
+            res.json(result)
+        })
+        //Added user to db using upsert
+        app.put('/users', async(req,res)=>{
+            const user = req.body;
+            const filter = {email: user.email};
+            const options = { upsert : true};
+            const update = {$set : user}
+            const result =await usersCollection.updateOne(filter,update,options);
+            res.json(result)
+        })    
     }
     finally {
         // await client.close();
