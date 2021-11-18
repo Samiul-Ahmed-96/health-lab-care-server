@@ -21,6 +21,7 @@ async function run() {
         const servicesCollection = database.collection("services");
         const doctorsCollection =database.collection("doctors");
         const appoinmentsCollection =database.collection("appoinments");
+        const reviewsCollection =database.collection("reviews");
         //Get All Services
         app.get('/services',async(req,res)=>{
                 const cursor = await servicesCollection.find({});
@@ -56,12 +57,17 @@ async function run() {
         //Delete single item from appoinments Api
         app.delete('/bookings/:id', async (req,res)=>{
             const id = req.params.id;
-            console.log("hitttttttt")
             const query = {_id : ObjectId(id)};
             const result = await appoinmentsCollection.deleteOne(query);
             console.log(result)
             res.json(result)
         })
+        //Add Reviews Api
+        app.post('/reviews',async(req,res)=>{
+            const review = req.body;
+            const result = await reviewsCollection.insertOne(review);
+            res.json(result);
+        })        
     }
     finally {
         // await client.close();
