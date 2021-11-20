@@ -98,6 +98,26 @@ async function run() {
             const result = await doctorsCollection.insertOne(doctor);
             res.json(result);
         })
+        //Add Service to db
+        app.post('/services', async (req, res) => {
+            const name = req.body.name;
+            const price = req.body.price;
+            const rating =req.body.rating;
+            const description =req.body.description;
+            const pic = req.files.img;
+            const picData = pic.data;
+            const encodedPic = picData.toString('base64');
+            const imageBuffer = Buffer.from(encodedPic, 'base64');
+            const service = {
+                name,
+                price,
+                description,
+                rating,
+                img: imageBuffer
+            }
+            const result = await servicesCollection.insertOne(service);
+            res.json(result);
+        })
         //Add Reviews Api
         app.post('/reviews',async(req,res)=>{
             const review = req.body;
