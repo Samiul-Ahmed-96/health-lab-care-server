@@ -56,6 +56,12 @@ async function run() {
             const allBookings = await cursor.toArray();
             res.send(allBookings);
         })
+        //Get All Reviews
+        app.get('/reviews',async(req,res)=>{
+            const cursor = await reviewsCollection.find({});
+            const allReviews = await cursor.toArray();
+            res.send(allReviews);
+        })
         //Delete single item from Services Api
         app.delete('/services/:id', async (req,res)=>{
             const id = req.params.id;
