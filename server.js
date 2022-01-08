@@ -44,6 +44,22 @@ async function run() {
             const singleService = await servicesCollection.findOne(query);
             res.json(singleService);
         })
+        //Update Single Service
+        app.put('/services/:id',async(req,res)=>{
+            const id = req.params.id;
+            const updatedService = req.body;
+            const filter = {_id:ObjectId(id)};
+            const options= {upsert:true};
+            const updateDoc = {
+                $set:{
+                    name : updatedService.name,
+                    price : updatedService.price,
+                    description : updatedService.description
+                },
+            };
+            const result = await servicesCollection.updateOne(filter,updateDoc,options)
+            res.send(result);
+        })
         //Add Booking Api
         app.post('/appoinments',async(req,res)=>{
             const appoinment = req.body;
